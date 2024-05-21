@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  task-manager:
+    container_name: nestjs-task-manger
+    build:
+      context: . #current directory
+      dockerfile: ./Dockerfile
+      target: development # declared in docker file
+    ports:
+      - '3500:3000'
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/usr/src/app
