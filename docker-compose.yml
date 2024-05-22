@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  task-management:
-    container_name: task-management
+  task-manager:
+    container_name: task-manager
     build:
       context: . #current directory
-      dockerfile: ./Dockerfile
+      dockerfile: ./apps/task-manager/Dockerfile
       target: development # declared in docker file
     command: npm run start:dev
     ports:

@@ -23,6 +23,6 @@ COPY  package-lock.json ./
 
 RUN npm install -omit=dev
 
-COPY --from=development /usr/src/app/dist ./dist
+COPY --from=development /usr/src/app/task-manager/dist ./dist
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/apps/task-manager/main.js"]
