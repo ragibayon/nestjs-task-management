@@ -4,11 +4,29 @@ services:
   task-manager:
     container_name: task-manager
     build:
-      context: . #current directory
+      context: . # current directory
       dockerfile: ./apps/task-manager/Dockerfile
-      target: development # declared in docker file
+      target: development # declared in Dockerfile
     command: npm run start:dev
     ports:
-      - '3000:3000'
+      - '3500:3000'
     volumes:
-      - .:/usr/src/app # changes to
+      - .:/usr/src/app
+
+    depends_on:
+      - db
+
+  db:
+    container_name: mongodb-task-manager
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+      - ./apps/task-manager/mongo-init:/docker-entrypoint-initdb.d
+
+volumes:
+  mongodb_data:
