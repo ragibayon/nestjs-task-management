@@ -12,21 +12,29 @@ services:
       - '3500:3000'
     volumes:
       - .:/usr/src/app
-
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     container_name: mongodb-task-manager
     image: mongo:latest
     ports:
       - '27017:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+    env_file:
+      - db.env
     volumes:
       - mongodb_data:/data/db
-      - ./apps/task-manager/mongo-init:/docker-entrypoint-initdb.d
-
+      - ./initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --host mongodb-task-manager --quiet --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 'Health Check Successful' || echo 'Health Check Failed'"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 volumes:
   mongodb_data:

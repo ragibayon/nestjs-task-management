@@ -11,10 +11,6 @@ RUN npm install
 # Copy all other source files
 COPY . .
 
-# Copy the wait-for script
-COPY wait-for /usr/local/bin/wait-for
-RUN chmod +x /usr/local/bin/wait-for
-
 # Build the application
 RUN npm run build
 
